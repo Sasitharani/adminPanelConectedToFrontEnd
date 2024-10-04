@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { AdminBaseUrl } from "../../config/config";
 import Sidebar from "../../common/Sidebar";
 import Header from "../../common/Header";
 import Breadcrumb from "../../common/Breadcrumb";
@@ -17,8 +15,8 @@ export default function AddColor() {
     console.log("Color Name:", colorName);
     console.log("Color Picker:", colorPicker);
     console.log("Color Status:", colorStatus);
-    let formDataobj=new FormData(event.target)
-    axios.post(AdminBaseUrl+"color/insert",formDataobj)
+        let formDataobj=new FormData(event.target)
+    axios.post(AdminBaseUrl+"/category/insert",formDataobj)
     .then((res)=>{
         if(res.data.status==1){
             //success
@@ -26,7 +24,7 @@ export default function AddColor() {
         }
         else{
             if(res.data.error.code==11000){
-               window.alert("Color Name allredy exits...")
+               window.alert("Category Name allredy exits...")
             }
         }
     })
@@ -40,7 +38,7 @@ export default function AddColor() {
           <h3 className="text-[20px] font-semibold bg-slate-100 py-2 px-3 rounded-t-md border border-slate-400">
             Add colors
           </h3>
-          <form onSubmit={handleSubmit} className="p-3 border border-t-0 rounded-b-md border-slate-400">
+          <form onSubmit={handleSubmit} className="p-3 border border-t-0 rounded-b-md border-slate-400" onSubmit={handleSubmit}>
             <div className="mb-5">
               <label
                 htmlFor="base-input"
