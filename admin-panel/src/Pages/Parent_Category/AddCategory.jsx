@@ -3,29 +3,49 @@ import Breadcrumb from "../../common/Breadcrumb";
 import axios from "axios";
 import { AdminBaseUrl } from "../../config/config";
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
+
+
 
 export default function AddCategory() {
 
   let [redirectstatus,setredirectstatus]=useState(false)
+  let[preview,setPreview]=useState(`https://vishwaentertainers.com/wp-content/uploads/2020/04/No-Preview-Available.jpg`)
   let navigate=useNavigate()
+
   let handleSave=(event)=>{
     event.preventDefault();
     let formDataobj=new FormData(event.target)
     axios.post(AdminBaseUrl+"/category/insert",formDataobj)
     .then((res)=>{
         if(res.data.status==1){
-            //success
-            window.alert("Data Save")
+          Swal.fire({
+            title: 'Success!',
+            text: response.data.msg,
+            icon: 'success',
+            confirmButtonText: 'OK'
+          });
+          setredirectstatus(true)
         }
         else{
             if(res.data.error.code==11000){
-               window.alert("Category Name allredy exits...")
+              Swal.fire({
+                title: 'Error!',
+                icon: 'error',
+                confirmButtonText: 'OK'
+              });
             }
         }
     })
   }
 
-
+useEffect(()=>{
+  if(redirectstatus){
+    setTimeout(()=>{
+      navigate('/parent-catergory/view-category')
+    }, 2000)
+  }
+}, [redirectstatus])
   return (
     <section className="w-full">
           <Breadcrumb
