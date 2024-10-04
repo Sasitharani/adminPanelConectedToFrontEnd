@@ -1,12 +1,11 @@
-import React from "react";
-import Sidebar from "../../common/Sidebar";
-import Header from "../../common/Header";
+import React, { useRef } from "react";
 import Breadcrumb from "../../common/Breadcrumb";
-import Footer from "../../common/Footer";
 import axios from "axios";
+import Swal from "sweetalert2";
 import { AdminBaseUrl } from "../../config/config";
 
 export default function SizeDetails() {
+<<<<<<< HEAD
   let handleSave=(event)=>{
     event.preventDefault();
     let formDataobj=new FormData(event.target)
@@ -22,6 +21,41 @@ export default function SizeDetails() {
         }
     })
   }
+=======
+  const sizeNameRef = useRef(null);
+  const sizeStatusRef = useRef("active");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const sizeDetails = {
+      sizeName: sizeNameRef.current.value,
+      sizeStatus: sizeStatusRef.current.checked ? "active" : "deactive",
+    };
+    console.log(sizeDetails);
+    // You can now send sizeDetails to your backend using axios or any other method
+    axios.post(`${AdminBaseUrl}/size/insert`, sizeDetails)
+      .then(response => {
+        if(response.data.msg =='Size exists'){
+          Swal.fire({
+            title: 'Error!',
+            text: response.data.msg,
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
+        else{
+        console.log("Size added successfully:", response.data);
+        Swal.fire({
+          title: 'Success!',
+          text: response.data.msg,
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+      }
+      })
+  };
+
+>>>>>>> refs/remotes/origin/main
   return (
     <>
       <Breadcrumb path={"Size"} path2={"Size Details"} slash={"/"} />
@@ -33,7 +67,7 @@ export default function SizeDetails() {
           <form onSubmit={handleSave} className="border border-t-0 p-3 rounded-b-md border-slate-400">
             <div className="mb-5">
               <label
-                for="base-input"
+                htmlFor="base-input"
                 className="block mb-5 text-md font-medium text-gray-900"
               >
                 Size Name
@@ -42,28 +76,31 @@ export default function SizeDetails() {
                 type="text"
                 name="sizeName"
                 id="base-input"
-                className="text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3 "
-                placeholder="Side Name"
+                className="text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3"
+                placeholder="Size Name"
+                ref={sizeNameRef}
               />
             </div>
             <div className="pe-5 ps-1">
               <span className="flex items-center gap-3">
                 Status :
                 <input
-                  id="link-radio"
+                  id="active-radio"
                   name="sizeStatus"
                   type="radio"
-                  value={true}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
-                ></input>
+                  value="active"
+                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                  defaultChecked
+                  ref={sizeStatusRef}
+                />
                 Active
                 <input
-                  id="link-radio"
+                  id="deactive-radio"
                   name="sizeStatus"
                   type="radio"
-                  value={true}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
-                ></input>
+                  value="deactive"
+                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                />
                 Deactive
               </span>
             </div>
