@@ -7,23 +7,21 @@ import axios from "axios";
 import { AdminBaseUrl } from "../../config/config";
 
 export default function SizeDetails() {
-  const handleSubmit = (event) => {
+  let handleSave=(event)=>{
     event.preventDefault();
     let formDataobj=new FormData(event.target)
-    console.log(formDataobj)
-    axios.post(AdminBaseUrl+"color/insert",formDataobj)
+    axios.post(AdminBaseUrl+"size/insert",formDataobj)
     .then((res)=>{
         if(res.data.status==1){
-            console.log(res.data)
             window.alert("Data Save")
         }
         else{
-            if(res.data.status==0){
-               window.alert(res.data)
+            if(res.data.error.code==11000){
+               window.alert("Size alredy exits...")
             }
         }
     })
-  };
+  }
   return (
     <>
       <Breadcrumb path={"Size"} path2={"Size Details"} slash={"/"} />
@@ -32,7 +30,7 @@ export default function SizeDetails() {
           <h3 className="text-[26px] font-semibold bg-slate-100 py-3 px-4 rounded-t-md border border-slate-400">
             Add Size
           </h3>
-          <form onSubmit={handleSubmit} className="border border-t-0 p-3 rounded-b-md border-slate-400">
+          <form onSubmit={handleSave} className="border border-t-0 p-3 rounded-b-md border-slate-400">
             <div className="mb-5">
               <label
                 for="base-input"
