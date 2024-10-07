@@ -1,6 +1,6 @@
 const { categoryModel } = require("../../models/Category")
-
-let categoryInsert=async (req,res)=>{
+let fs=require("fs")
+let categoryInsert=async(req,res)=>{
 
     let obj={
         categoryName:req.body.categoryName,
@@ -37,37 +37,38 @@ let categoryInsert=async (req,res)=>{
         res.send(resobj)
     }
 
-
-
-    // const data = req.body;
-
-    // if(req.file) data.thumbnail = req.file.filename;
-
-    // const dataToSave = new ParentCategory(data);
-    
-    // dataToSave.save()
-    // .then((response)=>{
-        
-    //     res.status(200).json({message:'success', data: response, });
-    // })
-    // .catch((error)=>{
-    //     console.log(error);
-    //     if(error && error.code === 11000 && error.keyPattern.name === 1) return   res.status(400).json({message:'please enter a unique name'});
-    //     res.status(500).json({message:'internal server error'});
-    // })
-    
 }
 
-const readParentCategories = (req, res)=>{
-    // ParentCategory.find()
-    // .then((reqponse)=>{
-    //     const file_path = `${req.protocol}://${req.get('host')}/frank-and-files/admin/`;
-    //     res.status(200).json({message:'success', data:reqponse, file_path})
-    // })
-    // .catch((error)=>{
-    //     console.log(error);
-    //     res.status(500).json({message:'internal server error'});
-    // })
+const categoryView = async(req, res)=>{
+let categoryData=await categoryModel.find()
+let obj={
+    status:1,
+    path:process.env.CATEGORYSTATICPATH,
+    data:categoryData
+}
+res.status(200).json(obj)
 };
+let singleDelete =async (req,res)=>{
+    let id=req.params.id;
+   
+    let data=await categoryModel.findOne({_id:id})
+    console.log(data)
 
-module.exports={categoryInsert,readParentCategories}
+    if(data){
+        let imageName=data.categoryImage;
+        let path ="uploads/category"+imageName
+        //fs.unlinkSync(path)
+
+        let deleteRes=await categoryModel.deleteOne({_id:id})
+        let obj={
+            status:1,
+            msg:"Delete data",
+            deleteRes
+        }
+        
+    }
+   
+    res.send(id)
+}
+
+module.exports={categoryInsert,categoryView,singleDelete}

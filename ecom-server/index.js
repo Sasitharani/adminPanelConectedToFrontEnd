@@ -10,6 +10,8 @@ app.use(cors())
 app.use(express.json())
 app.use('/frank-and-files/admin', express.static(path.join(__dirname,'uploads','category')));
 app.use(mainRoute)
+app.use("/uploads/category",express.static("uploads/category"))
+app.use('/uploads', express.static('uploads'));
 
 
 
