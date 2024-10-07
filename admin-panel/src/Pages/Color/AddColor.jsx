@@ -38,7 +38,7 @@ export default function AddColor() {
           <h3 className="text-[20px] font-semibold bg-slate-100 py-2 px-3 rounded-t-md border border-slate-400">
             Add colors
           </h3>
-          <form onSubmit={handleSubmit} className="p-3 border border-t-0 rounded-b-md border-slate-400" onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="p-3 border border-t-0 rounded-b-md border-slate-400">
             <div className="mb-5">
               <label
                 htmlFor="base-input"

@@ -1,97 +1,57 @@
-import React, { useState } from "react";
-import Sidebar from "../../common/Sidebar";
-import Header from "../../common/Header";
-import Breadcrumb from "../../common/Breadcrumb";
-import Footer from "../../common/Footer";
-import { ChromePicker } from "react-color";
+<tbody>
+{data.length >= 1 ? (
+  data.map((items, index) => {
+    return (
+      <div>
+        <tr className="bg-white border-b">
+          <td
+            scope="row"
+            className="px-6 py-4 text-[18px] font-semibold text-gray-900 whitespace-nowrap "
+          >
+            <input
+              name="deleteCheck"
+              id="purple-checkbox"
+              type="checkbox"
+              value=""
+              className="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500 "
+            />
+          </td>
 
-export default function AddColor() {
-  const [colorName, setColorName] = useState("");
-  const [colorPicker, setColorPicker] = useState("#000000");
-  const [colorStatus, setColorStatus] = useState("Active");
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("Color Name:", colorName);
-    console.log("Color Picker:", colorPicker);
-    console.log("Color Status:", colorStatus);
-  };
-
-  return (
-    <>
-      <Breadcrumb path={"Colors"} path2={"Add Color"} slash={"/"} />
-      <div className="w-full">
-        <div className="max-w-[1220px] mx-auto py-5">
-          <h3 className="text-[20px] font-semibold bg-slate-100 py-2 px-3 rounded-t-md border border-slate-400">
-            Add colors
-          </h3>
-          <form className="p-3 border border-t-0 rounded-b-md border-slate-400" onSubmit={handleSubmit}>
-            <div className="mb-5">
-              <label
-                htmlFor="base-input"
-                className="block mb-5 text-md font-medium text-gray-900"
-              >
-                Color Name
-              </label>
-              <input
-                type="text"
-                name="colorName"
-                id="base-input"
-                className="text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3"
-                placeholder="Color Name"
-                value={colorName}
-                onChange={(e) => setColorName(e.target.value)}
-              />
-            </div>
-            <div className="mb-5">
-              <label
-                htmlFor="color-picker"
-                className="block mb-8 text-md font-medium text-gray-900"
-              >
-                Color Picker
-              </label>
-              <input
-                type="color"
-                id="color-picker"
-                value={colorPicker}
-                onChange={(e) => setColorPicker(e.target.value)}
-              />
-              <br />
-            </div>
-            <div className="pe-5 ps-1">
-              <span className="flex items-center gap-3">
-                Status :
-                <input
-                  id="active-radio"
-                  name="colorStatus"
-                  type="radio"
-                  value="Active"
-                  checked={colorStatus === "Active"}
-                  onChange={(e) => setColorStatus(e.target.value)}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
-                />
-                Active
-                <input
-                  id="deactive-radio"
-                  name="colorStatus"
-                  type="radio"
-                  value="Deactive"
-                  checked={colorStatus === "Deactive"}
-                  onChange={(e) => setColorStatus(e.target.value)}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
-                />
-                Deactive
-              </span>
-            </div>
+          <td className="px-6 py-4">{index + 1}</td>
+          <td className="px-6 py-4">{items.categoryName}</td>
+          <td className="px-6 py-4">
+            <img
+              className="w-16 h-16 rounded-md object-cover"
+              src="https://i.pinimg.com/originals/bf/e0/39/bfe03930f2a1bfff7515a14dc47d34d1.png"
+              alt=""
+            />
+          </td>
+          <td className="px-6 py-4">
+            <p className="line-clamp-1 w-[180px]">
+              {items.categoryDescription}
+            </p>
             <button
-              type="submit"
-              className="focus:outline-none my-10 text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+              onClick={() => setOrderModal(true)}
+              className="text-[14px] text-blue-500 font-semibold hover:text-blue-700 hover:font-semibold"
             >
-              Select Color
+              Read More
             </button>
-          </form>
-        </div>
+          </td>
+          <td className="px-6 py-4 flex gap-3 mt-6">
+          <svg fill='red' className='w-4 h-4' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M170.5 51.6L151.5 80l145 0-19-28.4c-1.5-2.2-4-3.6-6.7-3.6l-93.7 0c-2.7 0-5.2 1.3-6.7 3.6zm147-26.6L354.2 80 368 80l48 0 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-8 0 0 304c0 44.2-35.8 80-80 80l-224 0c-44.2 0-80-35.8-80-80l0-304-8 0c-13.3 0-24-10.7-24-24S10.7 80 24 80l8 0 48 0 13.8 0 36.7-55.1C140.9 9.4 158.4 0 177.1 0l93.7 0c18.7 0 36.2 9.4 46.6 24.9zM80 128l0 304c0 17.7 14.3 32 32 32l224 0c17.7 0 32-14.3 32-32l0-304L80 128zm80 64l0 208c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-208c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0l0 208c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-208c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0l0 208c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-208c0-8.8 7.2-16 16-16s16 7.2 16 16z" /></svg>
+          |
+          <svg fill='gold' className='w-4 h-4' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160L0 416c0 53 43 96 96 96l256 0c53 0 96-43 96-96l0-96c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 96c0 17.7-14.3 32-32 32L96 448c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l96 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 64z" /></svg>
+        </td>
+        <td className="px-6 py-4">
+         { (items.categoryStatus) ? 'Active': 'Deactive'  }
+        </td>
+        </tr>
       </div>
-    </>
-  );
-}
+    );
+  })
+) : (
+  <tr className="bg-white border-b">
+    <td colSpan={6}> No Data Found..</td>
+  </tr>
+)}
+</tbody>
