@@ -5,23 +5,6 @@ import Swal from "sweetalert2";
 import { AdminBaseUrl } from "../../config/config";
 
 export default function SizeDetails() {
-<<<<<<< HEAD
-  let handleSave=(event)=>{
-    event.preventDefault();
-    let formDataobj=new FormData(event.target)
-    axios.post(AdminBaseUrl+"size/insert",formDataobj)
-    .then((res)=>{
-        if(res.data.status==1){
-            window.alert("Data Save")
-        }
-        else{
-            if(res.data.error.code==11000){
-               window.alert("Size alredy exits...")
-            }
-        }
-    })
-  }
-=======
   const sizeNameRef = useRef(null);
   const sizeStatusRef = useRef("active");
 
@@ -55,7 +38,6 @@ export default function SizeDetails() {
       })
   };
 
->>>>>>> refs/remotes/origin/main
   return (
     <>
       <Breadcrumb path={"Size"} path2={"Size Details"} slash={"/"} />
