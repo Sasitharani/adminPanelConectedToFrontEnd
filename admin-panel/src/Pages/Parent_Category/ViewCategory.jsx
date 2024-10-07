@@ -8,6 +8,7 @@ export default function ViewCategory() {
   let [orderModal, setOrderModal] = useState(false);
   let [path, setPath] = useState("");
   let [data, setData] = useState([]);
+  let[checkedIds,setCheckedIds]=useState([]);
 
   let getCategory = () => {
     axios
@@ -21,7 +22,47 @@ export default function ViewCategory() {
       });
   };
   
+let getCheckedid=(event)=>{
+  if(event.target.checked){
+    setCheckedIds([...checkedIds,event.target.value])
+  }
+  else{
+    let filterIds=checkedIds.filter((id)=>id!=event.target.value)
+    setCheckedIds(filterIds)
+  }
+}
 
+let multiDelete =()=>{
+
+if(checkedIds.length==0){
+Swal.fire("Please select a item to be deleted")
+}
+else{
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      axios.post(`${AdminBaseUrl}/category/multiDelete/`,{ids:checkedIds}).
+      then((res)=>{
+      Swal.fire(
+        'Deleted!',
+        'Your file has been deleted.',
+        'success'
+      );
+      getCategory();
+    });
+   
+    }
+  });
+}
+
+}
   
   let handleDelete =(id)=>{ {
   Swal.fire({
@@ -52,6 +93,9 @@ export default function ViewCategory() {
   useEffect(() => {
     getCategory();
   }, []);
+  useEffect(()=>{
+    console.log(checkedIds)
+  },[checkedIds])
   return (
     <section className="w-full">
       {/* Order Modal Start */}
@@ -190,9 +234,10 @@ export default function ViewCategory() {
               <table className="w-full text-left rtl:text-right text-gray-500">
                 <thead className="text-sm text-gray-700 uppercase bg-gray-50">
                   <tr>
-                    <th scope="col" className="px-6 py-3">
+                    <button onClick={multiDelete} className="px-6 py-3 bg-red-500 text-white rounded-md">
                       Delete
-                    </th>
+                    </button>
+
                     <th scope="col" className="px-6 py-3">
                       S. No.
                     </th>
@@ -214,22 +259,19 @@ export default function ViewCategory() {
                   </tr>
                 </thead>
                 <tbody>
-                  {
-                  
-                  data.length >= 1 ? (
+                  {data.length >= 1 ? (
                     data.map((item, index) => (
-                     
                       <tr key={index} className="bg-white border-b">
                         <th
                           scope="row"
                           className="px-6 py-4 text-[18px] font-semibold text-gray-900 whitespace-nowrap"
                         >
-                          
                           <input
+                            onChange={getCheckedid}
                             name="deleteCheck"
                             id="purple-checkbox"
                             type="checkbox"
-                            value=""
+                            value={item._id}
                             className="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500"
                           />
                         </th>
@@ -240,8 +282,11 @@ export default function ViewCategory() {
                           {item.categoryName}
                         </td>
                         <td className="px-6 py-4 text-[18px] font-semibold text-gray-900 whitespace-nowrap">
-                    
-                        <img className='w-16 h-16 rounded-md object-cover' src={path+item.categoryImage} alt="" />
+                          <img
+                            className="w-16 h-16 rounded-md object-cover"
+                            src={path + item.categoryImage}
+                            alt=""
+                          />
                         </td>
                         <td className="px-6 py-4 text-[18px] font-semibold text-gray-900 whitespace-nowrap">
                           {item.categoryDescription}
@@ -254,7 +299,7 @@ export default function ViewCategory() {
                             height="24"
                             fill="currentColor"
                             style={{ cursor: "pointer" }}
-                            onClick={()=>handleDelete(item._id)}
+                            onClick={() => handleDelete(item._id)}
                           >
                             <path d="M3 6h18v2H3V6zm2 3h14v13H5V9zm3 2v9h2v-9H8zm4 0v9h2v-9h-2zm4 0v9h2v-9h-2zM9 4V2h6v2h5v2H4V4h5z" />
                           </svg>
