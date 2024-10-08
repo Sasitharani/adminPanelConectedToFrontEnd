@@ -3,6 +3,7 @@ import Breadcrumb from "../../common/Breadcrumb";
 import axios from "axios";
 import { AdminBaseUrl } from "../../config/config";
 import Swal from 'sweetalert2';
+import { Link } from "react-router-dom";
 
 export default function ViewCategory() {
   let [orderModal, setOrderModal] = useState(false);
@@ -304,6 +305,7 @@ else{
                             <path d="M3 6h18v2H3V6zm2 3h14v13H5V9zm3 2v9h2v-9H8zm4 0v9h2v-9h-2zm4 0v9h2v-9h-2zM9 4V2h6v2h5v2H4V4h5z" />
                           </svg>
 
+                         <Link to={`/parent-category/add-category/${item._id}`}>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
@@ -314,6 +316,7 @@ else{
                           >
                             <path d="M3 17.25V21h3.75l11.06-11.06-3.75-3.75L3 17.25zm14.71-9.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
                           </svg>
+                          </Link>
                         </td>
                         <td className="px-6 py-4 text-[18px] font-semibold text-gray-900 whitespace-nowrap">
                           {item.categoryStatus ? "Active" : "Deactive"}

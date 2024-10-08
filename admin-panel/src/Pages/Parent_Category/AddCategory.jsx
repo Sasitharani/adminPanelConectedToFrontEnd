@@ -2,14 +2,22 @@ import React, { useEffect, useState } from "react";
 import Breadcrumb from "../../common/Breadcrumb";
 import axios from "axios";
 import { AdminBaseUrl } from "../../config/config";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Swal from 'sweetalert2';
 
 export default function AddCategory() {
 
   let [redirectstatus, setredirectstatus] = useState(false);
   let [preview, setPreview] = useState(`https://vishwaentertainers.com/wp-content/uploads/2020/04/No-Preview-Available.jpg`);
+  let [formAll,setformAll]=useState({
+      categoryName:'',
+      categoryDescription:'',
+      categoryStatus:1
+  })
   let navigate = useNavigate();
+
+
+  let {id}=useParams()//gets the value of id from URL
 
 
   let getImageorSetImage=(event)=>{
@@ -18,31 +26,51 @@ export default function AddCategory() {
   }
   let handleSave = (event) => {
     event.preventDefault();
-    // Create an object to hold all the input values
     let formDataobj = new FormData(event.target)
-    console.log(formDataobj)
-    axios.post(AdminBaseUrl + "/category/insert", formDataobj)
+  
+    if(id!==undefined){
+      axios.put(AdminBaseUrl + "/category/updaterow/"+id, formDataobj)
       .then((res) => {
         if (res.data.status == 1) {
-          Swal.fire({
-            title: 'Success!',
-            text: res.data.msg,
-            icon: 'success',
-            confirmButtonText: 'OK'
-          });
-          setredirectstatus(true);
-        } else {
+          //success
+          toast.success("Data Update")
+          event.target.reset()
+          setredirectstatus(true)
+        }
+        else {
           if (res.data.error.code == 11000) {
-            Swal.fire({
-              title: 'Error!',
-              icon: 'error',
-              confirmButtonText: 'OK'
-            });
+            toast.error("Category Name allredy exits...")
           }
         }
-      });
-  };
+      })
+    }
+    else{
+      axios.post(AdminBaseUrl + "/category/insert", formDataobj)
+      .then((res) => {
+        if (res.data.status == 1) {
+          //success
+          toast.success("Data Save")
+          event.target.reset()
+          setRedirectStatus(true)
+        }
+        else {
+          if (res.data.error.code == 11000) {
+            toast.error("Category Name already exits...")
+          }
+        }
+      })
+    }
 
+   
+  }
+  let getValueorSetValue=(event)=>{
+    let oldData=[...formAll]
+    let inputName=event.target.name;
+    let inputValue=event.targer.value;
+    oldData[inputName]=inputValue
+    setformAll(oldData)
+
+  }
   useEffect(() => {
     if (redirectstatus) {
       setTimeout(() => {
@@ -50,6 +78,33 @@ export default function AddCategory() {
       }, 2000);
     }
   }, [redirectstatus]);
+
+  useEffect(()=>{
+
+    setformAll({
+      categoryName:'',
+      categoryDescription:'',
+      categoryStatus:''
+    })
+    setPreview(`https://vishwaentertainers.com/wp-content/uploads/2020/04/No-Preview-Available.jpg`)
+
+
+    if(id!==undefined){
+      axios.get(`http://localhost:8000/admin/category/editrow/${id}`)
+       .then((res)=>res.data)
+        .then((finalres)=>{
+          if(finalres.status==1){
+            setPreview(finalres.path+finalres.data.categoryImage)
+            setformAll({
+              categoryName:finalres.data.categoryName,
+              categoryDescription:finalres.data.categoryDescription,
+              categoryStatus:finalres.data.categoryStatus
+            })
+   	   
+          }
+        })
+      }
+    },[id])
 
   return (
     <section className="w-full">
@@ -74,6 +129,8 @@ export default function AddCategory() {
               <input
                 type="text"
                 name="categoryName"
+                value={formAll.categoryName}
+                onChange={getValueorSetValue}
                 id="base-input"
                 className="text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3 "
                 placeholder="Category Name"
@@ -113,6 +170,7 @@ export default function AddCategory() {
                 name="categoryDescription"
                 id="message"
                 rows="3"
+                value={formAll.categoryDescription}
                 className="resize-none block p-2.5 w-full text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Add Product Description....."
               ></textarea>
@@ -124,7 +182,9 @@ export default function AddCategory() {
                   id="link-radio"
                   name="categoryStatus"
                   type="radio"
-                  value={true}
+                  value={1}
+                  onChange={getValueorSetValue}
+                  checked={formAll.categoryStatus==1 ? true : ''}
                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
                 /> Active
                 <input
@@ -132,6 +192,7 @@ export default function AddCategory() {
                   name="categoryStatus"
                   type="radio"
                   value={false}
+                  checked={formAll.categoryStatus==0 ? true : ''}
                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
                 /> Deactive
               </span>
@@ -140,7 +201,7 @@ export default function AddCategory() {
               type="submit"
               className="focus:outline-none my-10 text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
             >
-              Add Category
+              {id!==undefined?"Update " : "Save " }Category
             </button>
           </form>
         </div>

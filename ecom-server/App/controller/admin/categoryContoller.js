@@ -97,5 +97,40 @@ let multiDelete =async(req,res)=>{
     }
 res.send(obj)
 }
+let editRowData=async(req,res)=>{
+    let id=req.params.id;
+    let data=await categoryModel.findOne({_id:id})
+    let obj={
+        status:1,
+        path:process.env.CATEGORYSTATICPATH,
+        data
+    }
+    res.send(obj)
 
-module.exports={categoryInsert,categoryView,singleDelete,multiDelete}
+}
+let updateCategory=async(req,res)=>{
+    let id=req.params.id;
+   
+    let obj={
+        categoryName:req.body.categoryName,
+        categoryDescription:req.body.categoryDescription,
+        categoryStatus:req.body.categoryStatus
+    }
+
+    if(req.file){
+        if(req.file.filename){
+            obj['categoryImage']=req.file.filename
+        }
+        let updateData=await categoryModel.updateOne({id:_id},{$set:obj})
+        let resObj={
+            status:1,
+            msg:"updated",
+            updateData
+            
+        }
+
+    res.send(obj)
+
+}
+}
+module.exports={categoryInsert,categoryView,singleDelete,multiDelete,editRowData,updateCategory}

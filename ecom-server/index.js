@@ -15,8 +15,8 @@ app.use('/uploads', express.static('uploads'));
 
 
 
-//mongoose.connect(`mongodb+srv://sasitharan:sasi@learn.vfrd0.mongodb.net/${process.env.DBNAME}`)
-mongoose.connect(`mongodb://127.0.0.1:27017/${process.env.DBNAME}`)
+mongoose.connect(`mongodb+srv://sasitharan:sasi@learn.vfrd0.mongodb.net/${process.env.DBNAME}`)
+//mongoose.connect(`mongodb://127.0.0.1:27017/${process.env.DBNAME}`)
 .then((res)=>{
     app.listen(process.env.SERVERPORT)
     console.log(process.env.SERVERPORT,process.env.DBNAME)
