@@ -4,19 +4,17 @@ import axios from "axios";
 import { AdminBaseUrl } from "../../config/config";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
+import Swal from 'sweetalert2';
+
+
 
 export default function AddCategory() {
 
-  let [redirectstatus, setredirectstatus] = useState(false);
-  let [preview, setPreview] = useState(`https://vishwaentertainers.com/wp-content/uploads/2020/04/No-Preview-Available.jpg`);
-  let navigate = useNavigate();
+  let [redirectstatus,setredirectstatus]=useState(false)
+  let[preview,setPreview]=useState(`https://vishwaentertainers.com/wp-content/uploads/2020/04/No-Preview-Available.jpg`)
+  let navigate=useNavigate()
 
-
-  let getImageorSetImage=(event)=>{
-    let imageUrl=URL.createObjectURL(event.target.files[0])
-    setPreview(imageUrl)
-  }
-  let handleSave = (event) => {
+  let handleSave=(event)=>{
     event.preventDefault();
     // Create an object to hold all the input values
     let formDataobj = new FormData(event.target)
@@ -51,6 +49,37 @@ export default function AddCategory() {
     }
   }, [redirectstatus]);
 
+    let formDataobj=new FormData(event.target)
+    axios.post(AdminBaseUrl+"/category/insert",formDataobj)
+    .then((res)=>{
+        if(res.data.status==1){
+          Swal.fire({
+            title: 'Success!',
+            text: response.data.msg,
+            icon: 'success',
+            confirmButtonText: 'OK'
+          });
+          setredirectstatus(true)
+        }
+        else{
+            if(res.data.error.code==11000){
+              Swal.fire({
+                title: 'Error!',
+                icon: 'error',
+                confirmButtonText: 'OK'
+              });
+            }
+        }
+    })
+  }
+
+useEffect(()=>{
+  if(redirectstatus){
+    setTimeout(()=>{
+      navigate('/parent-catergory/view-category')
+    }, 2000)
+  }
+}, [redirectstatus])
   return (
     <section className="w-full">
       <Breadcrumb
