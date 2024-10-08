@@ -46,7 +46,7 @@ export default function SizeDetails() {
           <h3 className="text-[26px] font-semibold bg-slate-100 py-3 px-4 rounded-t-md border border-slate-400">
             Add Size
           </h3>
-          <form onSubmit={handleSubmit} className="border border-t-0 p-3 rounded-b-md border-slate-400">
+          <form onSubmit={handleSave} className="border border-t-0 p-3 rounded-b-md border-slate-400">
             <div className="mb-5">
               <label
                 htmlFor="base-input"

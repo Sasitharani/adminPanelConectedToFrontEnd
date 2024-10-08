@@ -70,5 +70,32 @@ let singleDelete =async (req,res)=>{
    
     res.send(id)
 }
+let multiDelete =async(req,res)=>{
+    let {ids}=req.body;//now ids will be array
+    for(let id of ids){
+        let data=await categoryModel.findOne({_id:id})
+        console.log(data)
+    
+        if(data){
+            let imageName=data.categoryImage;
+            let path ="uploads/category"+imageName
+            //fs.unlinkSync(path)
+    
+            let deleteRes=await categoryModel.deleteOne({_id:id})
+            let obj={
+                status:1,
+                msg:"Delete data",
+                deleteRes
+            }
+            
+        }
+       
+    }
+    let obj={
+        status:1,
+        msg:"Delete data",
+    }
+res.send(obj)
+}
 
-module.exports={categoryInsert,categoryView,singleDelete}
+module.exports={categoryInsert,categoryView,singleDelete,multiDelete}
