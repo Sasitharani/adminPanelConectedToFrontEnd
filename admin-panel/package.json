@@ -16,8 +16,10 @@
     "react-color": "^2.19.3",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.1",
+    "react-toastify": "^10.0.5",
     "sweetalert2": "^11.14.1",
-    "tailwind-scrollbar-hide": "^1.1.7"
+    "tailwind-scrollbar-hide": "^1.1.7",
+    "toastify": "^2.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

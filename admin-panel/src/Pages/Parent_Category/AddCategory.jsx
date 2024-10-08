@@ -4,6 +4,7 @@ import axios from "axios";
 import { AdminBaseUrl } from "../../config/config";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from 'sweetalert2';
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function AddCategory() {
 
@@ -29,7 +30,7 @@ export default function AddCategory() {
     let formDataobj = new FormData(event.target)
   
     if(id!==undefined){
-      axios.put(AdminBaseUrl + "/category/updaterow/"+id, formDataobj)
+      axios.put(AdminBaseUrl + "category/updaterow/"+id, formDataobj)
       .then((res) => {
         if (res.data.status == 1) {
           //success
@@ -51,7 +52,7 @@ export default function AddCategory() {
           //success
           toast.success("Data Save")
           event.target.reset()
-          setRedirectStatus(true)
+          setredirectstatus(true)
         }
         else {
           if (res.data.error.code == 11000) {
@@ -64,9 +65,9 @@ export default function AddCategory() {
    
   }
   let getValueorSetValue=(event)=>{
-    let oldData=[...formAll]
+    let oldData={...formAll}
     let inputName=event.target.name;
-    let inputValue=event.targer.value;
+    let inputValue=event.target.value;
     oldData[inputName]=inputValue
     setformAll(oldData)
 
@@ -206,6 +207,7 @@ export default function AddCategory() {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </section>
   );
 }
