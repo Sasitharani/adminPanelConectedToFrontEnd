@@ -28,15 +28,23 @@ export default function AddCategory() {
   let handleSave = (event) => {
     event.preventDefault();
     let formDataobj = new FormData(event.target)
-  
     if(id!==undefined){
-      axios.put(AdminBaseUrl + "category/updaterow/"+id, formDataobj)
+
+      axios.put(AdminBaseUrl + "/category/updaterow/"+id, formDataobj)
       .then((res) => {
+        console.log(res.data.status)
         if (res.data.status == 1) {
           //success
-          toast.success("Data Update")
+          Swal.fire({
+            title: 'Success!',
+            text: 'Your operation was successful.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
           event.target.reset()
+              //--------------------------------------------------------------------------
           setredirectstatus(true)
+          //--------------------------------------------------------------------------
         }
         else {
           if (res.data.error.code == 11000) {
@@ -50,7 +58,12 @@ export default function AddCategory() {
       .then((res) => {
         if (res.data.status == 1) {
           //success
-          toast.success("Data Save")
+          Swal.fire({
+            title: 'Success!',
+            text: 'Your operation was successful.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
           event.target.reset()
           setredirectstatus(true)
         }
@@ -171,6 +184,7 @@ export default function AddCategory() {
                 name="categoryDescription"
                 id="message"
                 rows="3"
+                onChange={getValueorSetValue}
                 value={formAll.categoryDescription}
                 className="resize-none block p-2.5 w-full text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Add Product Description....."
