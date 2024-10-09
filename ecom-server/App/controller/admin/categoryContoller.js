@@ -1,7 +1,7 @@
 const { categoryModel } = require("../../models/Category")
 let fs=require("fs")
 let categoryInsert=async(req,res)=>{
-
+    console.log("INSERT LOOP IN CATEGORY CONTROLLER")
     let obj={
         categoryName:req.body.categoryName,
         categoryDescription:req.body.categoryDescription,
@@ -110,10 +110,12 @@ let editRowData=async(req,res)=>{
 }
 let updateCategory=async(req,res)=>{
     let id=req.params.id;
-   
+    
+    console.log("Name   "+req.body.categoryName)
+   console.log("Id  "+id)
     let obj={
         categoryName:req.body.categoryName,
-        categoryDescription:req.body.categoryDescription,
+        categoryDescription:req.body.categoryDescription, 
         categoryStatus:req.body.categoryStatus
     }
 
@@ -121,16 +123,17 @@ let updateCategory=async(req,res)=>{
         if(req.file.filename){
             obj['categoryImage']=req.file.filename
         }
-        let updateData=await categoryModel.updateOne({id:_id},{$set:obj})
+    }
+        let updateData=await categoryModel.updateOne({_id:id},{$set:obj})
         let resObj={
             status:1,
             msg:"updated",
             updateData
             
         }
+        console.log("Msg  "+resObj.msg)
+    res.send(resObj)
 
-    res.send(obj)
 
-}
 }
 module.exports={categoryInsert,categoryView,singleDelete,multiDelete,editRowData,updateCategory}

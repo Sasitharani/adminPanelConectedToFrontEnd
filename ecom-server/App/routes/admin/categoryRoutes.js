@@ -11,7 +11,7 @@ categoryRoutes.delete("/delete/:id",singleDelete)
 categoryRoutes.post("/multiDelete/",multiDelete)
 
 categoryRoutes.get("/editrow/:id",editRowData)//view data
-categoryRoutes.get("/updaterow/:id",uploads('uploads/category').single('categoryImage'),updateCategory)//update data
+categoryRoutes.put("/updaterow/:id",uploads('uploads/category').single('categoryImage'),updateCategory)//update data
 
 module.exports={categoryRoutes}
 
