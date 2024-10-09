@@ -11,9 +11,22 @@ export default function ViewCategory() {
   let [data, setData] = useState([]);
   let[checkedIds,setCheckedIds]=useState([]);
 
+  let [SearchData,setSearchData]=useState({
+    catName:'',
+    catDesc:''
+  })
+
+  let GetorSetValue =(event)=>{
+    let oldSearch={...SearchData}
+    oldSearch[event.target.name]=event.target.value
+    setSearchData(oldSearch)
+  }
+
   let getCategory = () => {
     axios
-      .get(`${AdminBaseUrl}/category/view`)
+      .get(`${AdminBaseUrl}/category/view`,{
+        params:SearchData
+      })
       .then((res) => res.data)
       .then((finalRes) => {
         if (finalRes.status == 1) {
@@ -94,6 +107,16 @@ else{
   useEffect(() => {
     getCategory();
   }, []);
+
+  let submitSearchForm=(event)=>{
+    event.preventDefault();
+    getCategory();
+  }
+
+  useEffect(()=>{
+    getCategory();
+  },[SearchData])
+
   useEffect(()=>{
     console.log(checkedIds)
   },[checkedIds])
@@ -225,6 +248,27 @@ else{
         path2={"View Category"}
         slash={"/"}
       />
+      <form onSubmit={submitSearchForm}>
+            <div className="flex items-center justify-center space-x-4 p-4 bg-gray-100 rounded-lg shadow-lg">
+              <input
+                name="catName"
+                type="text"
+                placeholder="Search by Name"
+                onChange={GetorSetValue}
+                className="w-1/3 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <input
+                name="catDesc"
+                type="text"
+                placeholder="Search by Description"
+                onChange={GetorSetValue}
+                className="w-1/3 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                Submit
+              </button>
+            </div>
+      </form>
       <div className="w-full min-h-[610px]">
         <div className="max-w-[1220px] mx-auto py-5">
           <h3 className="text-[26px] font-semibold bg-slate-100 py-3 px-4 rounded-t-md border border-slate-400">

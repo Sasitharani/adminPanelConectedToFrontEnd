@@ -40,7 +40,25 @@ let categoryInsert=async(req,res)=>{
 }
 
 const categoryView = async(req, res)=>{
-let categoryData=await categoryModel.find()
+   
+    let searchObj={
+
+    }
+
+    let {catName,catDesc}=req.query;
+    
+
+    if(catName!==''){
+        searchObj['categoryName']=new RegExp(catName,'i')
+        //Working---------------
+        console.log('categoryName:  '+searchObj.categoryName)
+    }
+    if(catDesc!==''){
+        searchObj['categoryDescription']=new RegExp(catDesc,'i')
+        console.log('categoryDesc:  '+searchObj.categoryDesc)
+    }
+
+let categoryData=await categoryModel.find(searchObj)
 let obj={
     status:1,
     path:process.env.CATEGORYSTATICPATH,
