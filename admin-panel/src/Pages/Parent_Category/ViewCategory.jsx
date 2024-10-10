@@ -14,7 +14,9 @@ export default function ViewCategory() {
   let[checkedIds,setCheckedIds]=useState([]);
 // Pagination Variables
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 4;
+  const [limit, setLimit] = useState(1);
+  const[totalPages,settotalPages]=useState(0);
+  
 // Pagination Variables
 
 
@@ -45,6 +47,8 @@ export default function ViewCategory() {
         if (finalRes.status == 1) {
           setPath(finalRes.path);
           setData(finalRes.data);
+          settotalPages(finalRes.allPage)
+          setLimit(finalRes.limit)
         }
       });
   };
@@ -342,7 +346,7 @@ else{
                           />
                         </th>
                         <td className="px-6 py-4 text-[18px] font-semibold text-gray-900 whitespace-nowrap">
-                          {index + 1}
+                          {(currentPage-1)*limit+(index + 1)}
                         </td>
                         <td className="px-6 py-4 text-[18px] font-semibold text-gray-900 whitespace-nowrap">
                           {item.categoryName}

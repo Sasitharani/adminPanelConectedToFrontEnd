@@ -44,8 +44,9 @@ const categoryView = async(req, res)=>{
     let searchObj={
 
     }
-
-    let {catName,catDesc}=req.query;
+// ----------------------------------------------------------------------Now Working____________________________________________________
+let limit=2;
+    let {catName,catDesc,pageNo}=req.query;
     
 
     if(catName!==''){
@@ -58,11 +59,17 @@ const categoryView = async(req, res)=>{
         console.log('categoryDesc:  '+searchObj.categoryDesc)
     }
 
-let categoryData=await categoryModel.find(searchObj).skip(5).limit(2)
+let categoryData=await categoryModel.find(searchObj).skip((pageNo-1)*limit).limit(2)
+let totalPages=await categoryModel.find(searchObj);//getting all values from database
+let allPage=Math.ceil(totalPages.length/limit);//Total no of pages
+
+
 let obj={
     status:1,
     path:process.env.CATEGORYSTATICPATH,
-    data:categoryData
+    data:categoryData,
+    allPage,
+    limit
 }
 res.status(200).json(obj)
 };
