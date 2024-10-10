@@ -4,16 +4,24 @@ import axios from "axios";
 import { AdminBaseUrl } from "../../config/config";
 import Swal from 'sweetalert2';
 import { Link } from "react-router-dom";
+import ResponsivePagination from 'react-responsive-pagination';
+
 
 export default function ViewCategory() {
   let [orderModal, setOrderModal] = useState(false);
   let [path, setPath] = useState("");
   let [data, setData] = useState([]);
   let[checkedIds,setCheckedIds]=useState([]);
+// Pagination Variables
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 4;
+// Pagination Variables
+
 
   let [SearchData,setSearchData]=useState({
     catName:'',
-    catDesc:''
+    catDesc:'',
+    pageNo:1
   })
 
   let GetorSetValue =(event)=>{
@@ -23,9 +31,14 @@ export default function ViewCategory() {
   }
 
   let getCategory = () => {
+    let obj={...SearchData}
+    obj['pageNo']=currentPage
+    console.log(obj.pageNo)
+ console.log(obj)
     axios
+    // ________________________________________________View____________________________________________________________
       .get(`${AdminBaseUrl}/category/view`,{
-        params:SearchData
+        params:obj
       })
       .then((res) => res.data)
       .then((finalRes) => {
@@ -107,6 +120,11 @@ else{
   useEffect(() => {
     getCategory();
   }, []);
+    // ________________________________________________Pagination____________________________________________________________
+  useEffect(() =>{
+    getCategory()   
+   // console.log(currentPage)
+  },[currentPage])
 
   let submitSearchForm=(event)=>{
     event.preventDefault();
@@ -249,25 +267,25 @@ else{
         slash={"/"}
       />
       <form onSubmit={submitSearchForm}>
-            <div className="flex items-center justify-center space-x-4 p-4 bg-gray-100 rounded-lg shadow-lg">
-              <input
-                name="catName"
-                type="text"
-                placeholder="Search by Name"
-                onChange={GetorSetValue}
-                className="w-1/3 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <input
-                name="catDesc"
-                type="text"
-                placeholder="Search by Description"
-                onChange={GetorSetValue}
-                className="w-1/3 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                Submit
-              </button>
-            </div>
+        <div className="flex items-center justify-center space-x-4 p-4 bg-gray-100 rounded-lg shadow-lg">
+          <input
+            name="catName"
+            type="text"
+            placeholder="Search by Name"
+            onChange={GetorSetValue}
+            className="w-1/3 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            name="catDesc"
+            type="text"
+            placeholder="Search by Description"
+            onChange={GetorSetValue}
+            className="w-1/3 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            Submit
+          </button>
+        </div>
       </form>
       <div className="w-full min-h-[610px]">
         <div className="max-w-[1220px] mx-auto py-5">
@@ -279,7 +297,10 @@ else{
               <table className="w-full text-left rtl:text-right text-gray-500">
                 <thead className="text-sm text-gray-700 uppercase bg-gray-50">
                   <tr>
-                    <button onClick={multiDelete} className="px-6 py-3 bg-red-500 text-white rounded-md">
+                    <button
+                      onClick={multiDelete}
+                      className="px-6 py-3 bg-red-500 text-white rounded-md"
+                    >
                       Delete
                     </button>
 
@@ -349,17 +370,19 @@ else{
                             <path d="M3 6h18v2H3V6zm2 3h14v13H5V9zm3 2v9h2v-9H8zm4 0v9h2v-9h-2zm4 0v9h2v-9h-2zM9 4V2h6v2h5v2H4V4h5z" />
                           </svg>
 
-                         <Link to={`/parent-category/add-category/${item._id}`}>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            width="24"
-                            height="24"
-                            style={{ cursor: "pointer" }}
-                            onclick="handleEdit()"
+                          <Link
+                            to={`/parent-category/add-category/${item._id}`}
                           >
-                            <path d="M3 17.25V21h3.75l11.06-11.06-3.75-3.75L3 17.25zm14.71-9.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
-                          </svg>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              width="24"
+                              height="24"
+                              style={{ cursor: "pointer" }}
+                              onclick="handleEdit()"
+                            >
+                              <path d="M3 17.25V21h3.75l11.06-11.06-3.75-3.75L3 17.25zm14.71-9.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                            </svg>
                           </Link>
                         </td>
                         <td className="px-6 py-4 text-[18px] font-semibold text-gray-900 whitespace-nowrap">
@@ -376,6 +399,11 @@ else{
                   )}
                 </tbody>
               </table>
+              <ResponsivePagination
+                current={currentPage}
+                total={totalPages}
+                onPageChange={setCurrentPage}
+              />
             </div>
           </div>
         </div>

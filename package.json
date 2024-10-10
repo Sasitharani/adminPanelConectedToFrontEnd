@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "react-responsive-pagination": "^2.8.0",
     "sweetalert2": "^11.14.1"
   }
 }

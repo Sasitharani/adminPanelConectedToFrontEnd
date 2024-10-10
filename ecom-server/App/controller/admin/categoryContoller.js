@@ -58,7 +58,7 @@ const categoryView = async(req, res)=>{
         console.log('categoryDesc:  '+searchObj.categoryDesc)
     }
 
-let categoryData=await categoryModel.find(searchObj)
+let categoryData=await categoryModel.find(searchObj).skip(5).limit(2)
 let obj={
     status:1,
     path:process.env.CATEGORYSTATICPATH,
